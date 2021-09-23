@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  node_backend:
+    container_name: star_warz
+    image: bendiumpope/star-warz
+    build:
+      context: .
+    ports:
+      - "3001:3001"
+    environment:
+      - PORT=3001
+      - PGDATABASE=star_warz_db
+      - PGUSER=benedict
+      - PGPASSWORD=12345
+      - PGHOST=node_db
+    depends_on:
+      - node_db
+  node_db:
+    container_name: node_db
+    image: "postgres:12"
+    ports:
+      - "5431:5432"
+    environment:
+      - POSTGRES_USER=benedict
+      - POSTGRES_PASSWORD=12345
+      - POSTGRES_DB=star_warz_db
+    volumes:
+      - nps_data:/var/lib/postgresql/data
+
+volumes:
+  nps_data: {}  
