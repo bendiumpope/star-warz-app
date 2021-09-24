@@ -1,5 +1,5 @@
 const axios = require("axios").default;
-const User = require("../models/commentModel");
+const Comment = require("../models/commentModel");
 const HttpError = require("../models/httpError");
 
 exports.getMovies = async (req, res, next) => {
@@ -12,14 +12,23 @@ exports.getMovies = async (req, res, next) => {
           name: movie.title,
           opening_crawl: movie.opening_crawl,
           release_date: movie.release_date,
-          characters: movie.characters,
           comment_counts: 0,
-          comments: []
         };
         acc.push(movieObj)
 
         return acc;
-      }, [])
+      }, []);
+
+      const comments = await Comment.findAll();
+
+      comments.forEach((comment) => {
+        responseData.forEach(movie => {
+          if (comment.movieId === movie.episode_id) {
+            movie.comment_counts++;
+           } 
+        })
+        
+      });      
 
       responseData.sort((a, b) => {
         let dateA = new Date(a.release_date), dateB = new Date(b.release_date)
@@ -28,7 +37,7 @@ exports.getMovies = async (req, res, next) => {
       // const data = JSON.stringify(responseData)
       return res.status(200).json(responseData);
     } catch (error) {
-      return next(new HttpError("Fetching movies failed", 500));
+      return next(new HttpError(`Fetching movies failed ${error}`, 500));
     }
 }
 
