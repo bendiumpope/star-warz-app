@@ -1,7 +1,7 @@
 const Sequelize = require("sequelize");
 const db = require("../utils/database");
 
-const Comment = db.define("commentss", {
+const Comment = db.define("comments", {
   id: {
     type: Sequelize.INTEGER,
     autoIncrement: true,
@@ -10,7 +10,7 @@ const Comment = db.define("commentss", {
   },
   comment: {
     type: Sequelize.STRING,
-    allowNull: true,
+    allowNull: false,
     unique: false,
   },
   publicIp: {
@@ -19,8 +19,8 @@ const Comment = db.define("commentss", {
     unique: false,
   },
   movieId: {
-    type: Sequelize.STRING,
-    allowNull: true,
+    type: Sequelize.INTEGER,
+    allowNull: false,
   },
 });
 

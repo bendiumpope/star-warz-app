@@ -1,64 +1,76 @@
 const Comment = require("../models/commentModel");
+const HttpError = require("../models/httpError");
+const publicIp = require("public-ip");
 
 exports.getComments = async (req, res, next) => {
   try {
-    const comments = await User.findAll();
-    
-      if (comments.length > 1) {
-          comments.reverse();
-      }
-      
+    const comments = await Comment.findAll();
+
+    if (comments.length > 1) {
+      comments.reverse();
+    }
+
     return res.status(200).json(comments);
   } catch (error) {
-    return res.status(500).json(error);
+    return next(new HttpError("Fetching comments failed", 500));
   }
 };
 
 exports.getComment = async (req, res, next) => {
   try {
-    const comment = await User.findByPk(req.params.commentId);
+    const comment = await Comment.findByPk(req.params.commentId);
     return res.status(200).json(comment);
   } catch (error) {
-    return res.status(500).json(error);
+    return next(new HttpError("Fetching comment failed", 500));
   }
 };
 
 exports.createComment = async (req, res, next) => {
-  const COMMENT_MODEL = {
-    comment: req.body.comment,
-    movieId: req.params.movieId
-  };
+  const ip = await publicIp.v4();
 
+  const COMMENT_MODEL = {
+    comment: req.body.comment.trim(),
+    movieId: +req.params.movieId,
+    publicIp: ip,
+  };
+    if (req.body.comment.trim().length > 500) {
+      return next(
+        new HttpError(
+          "Comment length should not be more than 500 characters",
+          500
+        )
+      );
+    }
   try {
     const comment = await Comment.create(COMMENT_MODEL);
     return res.status(200).json(comment);
   } catch (error) {
-    return res.status(500).json(error);
+    return next(new HttpError("Creating comment failed", 500));
   }
 };
 
-// exports.updateOne = async (req, res, next) => {
-//   try {
-//     const USER_MODEL = {
-//       username: req.body.username,
-//       email: req.body.email,
-//       password: req.body.password,
-//     };
-//     const user = await User.update(USER_MODEL, {
-//       where: { id: req.params.id },
-//     });
-//     return res.status(200).json(user);
-//   } catch (error) {
-//     return res.status(500).json(error);
-//   }
-// };
+exports.updateComment = async (req, res, next) => {
+  try {
+    const COMMENT_MODEL = {
+      comment: req.body.comment,
+    };
 
-// exports.deleteOne = async (req, res, next) => {
-//   try {
-//     const user = await User.destroy({ where: { id: req.params.id } });
-//     return res.status(201).json(user);
-//   } catch (error) {
-//     return res.status(500).json(error);
-//   }
-// };
+    const comment = await Comment.update(COMMENT_MODEL, {
+      where: { id: req.params.commentId },
+    });
+    return res.status(200).json(comment);
+  } catch (error) {
+    return next(new HttpError("Updating comment failed", 500));
+  }
+};
 
+exports.deleteComment = async (req, res, next) => {
+  try {
+    const comment = await Comment.destroy({
+      where: { id: req.params.commentId },
+    });
+    return res.status(201).json(comment);
+  } catch (error) {
+    return next(new HttpError("Deleting comment failed", 500));
+  }
+};
