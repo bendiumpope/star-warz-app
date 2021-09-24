@@ -5,7 +5,7 @@ const xss = require("xss-clean");
 require("dotenv").config();
 
 const movieRouter = require("./routes/movieRoute");
-// const commentRouter = require("./routes/commentRoute");
+const commentRouter = require("./routes/commentRoute");
 const sequelize = require('./utils/database');
 const Comment = require('./models/commentModel');
 const HttpError = require("./models/httpError");
@@ -50,7 +50,7 @@ app.use((req, res, next) => {
 
 /// API ROUTES///
 app.use('/api/movies', movieRouter);
-// app.use('/api/comments', commentRouter);
+app.use('/api/comments', commentRouter);
 
 ////HANDLING ERROR ROUTES//////
 app.use((req, res, next) => {
