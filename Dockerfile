@@ -3,7 +3,7 @@ ENV NODE_ENV=production
 
 EXPOSE 3001
 
-WORKDIR /src
+WORKDIR /
 
 COPY ["package.json", "package-lock.json*", "./"]
 
