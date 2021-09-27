@@ -24,10 +24,11 @@ exports.getMovies = async (req, res, next) => {
 exports.getCharacters = async (req, res, next) => {
   try {
     const response = await axios("https://swapi.dev/api/people/");
+    
 
-    let sortValue = req.query.sort.split(":")[0];
-    let sortType = req.query.sort.split(":")[1];
-    let filterValue = req.query.filter;
+    let sortValue = req.query ? req.query.sort.split(":")[0] : "";
+    let sortType = req.query ? req.query.sort.split(":")[1] : "";
+    let filterValue = req.query ? req.query.filter : "";
 
     const responseData = await movieFeatures.getCharactersFeatures({
       response,
