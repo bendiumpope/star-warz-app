@@ -119,7 +119,7 @@ exports.deleteComment = async (req, res, next) => {
       );
     }
     const comment = await Comment.destroy({
-      where: { id: req.params.commentId },
+      where: { id: commentId },
     });
     return res.status(201).json(comment);
   } catch (error) {
