@@ -1,11 +1,18 @@
 const Sequelize = require('sequelize');
 
+const dataBaseString = require('./DataBaseHelper');
+
+
+const [user, password, host, port, database] =
+  dataBaseString.GetHerokuConnectionString(process.env.DATABASE_URL);
+
 const sequelize = new Sequelize(
-    process.env.PGDATABASE,
-    process.env.PGUSER,
-    process.env.PGPASSWORD,
+    database,
+    user,
+    password,
     {
-        host: process.env.PGHOST,
+        port: port,
+        host: host,
         dialect: 'postgres'
     }
 )
