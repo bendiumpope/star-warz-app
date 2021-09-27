@@ -34,18 +34,22 @@ exports.getMoviesFeatures = async (response, comments) => {
 exports.getCharactersFeatures = async (responseObj) => {
   let responseData = await responseObj.response.data.results;
 
-  if (responseObj.sortValue && responseObj.sortType) {
+  let sortValue = responseObj.queryString.sort ? responseObj.queryString.sort.split(":")[0] : "";
+  let sortType = responseObj.queryString.sort ? responseObj.queryString.sort.split(":")[1] : "";
+  let filterValue = responseObj.queryString.filter ? responseObj.queryString.filter : "";
+
+  if (sortValue && sortType) {
     responseData.sort(
-      (a, b) => (a[responseObj.sortValue] > b[responseObj.sortValue] && 1) || -1
+      (a, b) => (a[sortValue] > b[sortValue] && 1) || -1
     );
   }
-  if (responseObj.sortType === "dsc") {
+  if (sortType === "dsc") {
     responseData.reverse();
   }
 
-  if (responseObj.filterValue) {
+  if (filterValue) {
     responseData = responseData.filter((character) => {
-      return character.gender == responseObj.filterValue;
+      return character.gender == filterValue;
     });
   }
 
