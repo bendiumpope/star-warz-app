@@ -13,7 +13,7 @@ const Comment = db.define("comments", {
     allowNull: false,
     unique: false,
   },
-  publicIp: {
+  publicIps: {
     type: Sequelize.STRING,
     allowNull: true,
     unique: false,
