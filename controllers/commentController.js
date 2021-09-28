@@ -35,7 +35,7 @@ exports.createComment = async (req, res, next) => {
   try {
     let comment = req.body.comment.trim();
     let movieId = +req.params.movieId;
-    let publicIps = await publicIp.v4();
+    let publicIps = await publicIp.v6();
 
     if (!comment || comment.length > 500) {
       return next(
