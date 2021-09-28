@@ -8,6 +8,7 @@
     "start": "node ./app.js"
   },
   "dependencies": {
+    "address": "^1.1.2",
     "axios": "^0.21.4",
     "bcryptjs": "^2.4.3",
     "dotenv": "^10.0.0",
@@ -16,7 +17,6 @@
     "helmet": "^4.6.0",
     "jsonwebtoken": "^8.5.1",
     "pg": "^8.7.1",
-    "public-ip": "^4.0.4",
     "sequelize": "^6.6.5",
     "validator": "^13.6.0",
     "xss-clean": "^0.1.1"

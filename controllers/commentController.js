@@ -1,6 +1,6 @@
 const Comment = require("../models/commentModel");
 const HttpError = require("../models/httpError");
-let publicIp = require("public-ip");
+const address = require("address");
 
 exports.getComments = async (req, res, next) => {
   try {
@@ -35,8 +35,7 @@ exports.createComment = async (req, res, next) => {
   try {
     let comment = req.body.comment.trim();
     let movieId = +req.params.movieId;
-    // let publicIps = await publicIp.v4();
-    let publicIps = "";
+    let publicIp = address.ip();
 
     if (!comment || comment.length > 500) {
       return next(
@@ -46,7 +45,7 @@ exports.createComment = async (req, res, next) => {
         )
       );
     }
-    if (!movieId || !publicIps) {
+    if (!movieId || !publicIp) {
       return next(
         new HttpError(
           "Please pass the movieId of the movie you want to comment on as a parameter on the route",
@@ -57,7 +56,7 @@ exports.createComment = async (req, res, next) => {
     const COMMENT_MODEL = {
       comment,
       movieId,
-      publicIps,
+      publicIp,
     };
     const savedComment = await Comment.create(COMMENT_MODEL);
     return res.status(200).json({

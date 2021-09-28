@@ -15,7 +15,7 @@ const Comment = db.define("comments", {
   },
   publicIps: {
     type: Sequelize.STRING,
-    allowNull: true,
+    allowNull: false,
     unique: false,
   },
   movieId: {
